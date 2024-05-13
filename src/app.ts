@@ -1,3 +1,5 @@
+import { ENVS } from "./config/envs";
+import { MongoDatabase } from "./infraestructure/databases/mongo/init";
 
 
 (async () => {
@@ -5,5 +7,8 @@
 })();
 
 async function main() {
-    console.log('Hello World!!');
+    
+    await MongoDatabase.connect(ENVS.MONGO_URL);
+    console.log('Connected');
+
 }
