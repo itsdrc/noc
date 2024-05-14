@@ -1,32 +1,46 @@
 import { LogDataSource } from "../../domain/abstract-classes/logDataSource";
-import { LogEntity, LogEntityLevel } from "../../domain/entities/log.entity";
+import { Log, LogEntity, LogEntityLevel } from "../../domain/entities/log.entity";
+import { CheckServerStatus } from "../server/checkstatus";
+
+export interface CheckAndLogInterface {
+    serverChecker: CheckServerStatus,
+    logDataSource: LogDataSource[],
+    succesCallBack: () => void,
+    errorCallBack: (error: string) => void,
+}
 
 export type SuccesCallBack = () => void;
 export type ErrorCallBack = (error: string) => void;
 
 export class CheckAndLog {
 
-    constructor(
-        private readonly logDataSource: LogDataSource[],
-        private readonly succescallback: SuccesCallBack,
-        private readonly errorcallback: ErrorCallBack,
-    ) { }
+    private readonly serverChecker;
+    private readonly logDataSource;
+    private readonly succesCallBack;
+    private readonly errorCallBack;
+
+    constructor(props: CheckAndLogInterface) {
+
+        const { serverChecker, logDataSource, succesCallBack, errorCallBack } = props;
+        this.serverChecker = serverChecker;
+        this.logDataSource = logDataSource;
+        this.succesCallBack = succesCallBack;
+        this.errorCallBack = errorCallBack;
+    }
 
     async execute(url: string): Promise<boolean> {
 
+        const serverStatus = await this.serverChecker.checkStatus();
         let level: LogEntityLevel;
         let message: string;
-        let ok = false;
         let log: LogEntity;
 
-        try {
+        if (serverStatus) {
 
-            await fetch(url);
             message = `${url} is working`;
             level = LogEntityLevel.low;
-            ok = true;
 
-        } catch (error) {
+        } else {
 
             message = `CANNOT ACCESS THE URL ${url}`;
             level = LogEntityLevel.high;
@@ -36,11 +50,11 @@ export class CheckAndLog {
             origin: 'check-and-log.ts',
             level,
             message,
-        })
+        });
 
         this.logDataSource.forEach(async logdatasource => await logdatasource.saveLog(log));
-        ok ? this.succescallback() : this.errorcallback(message);
-        return ok;
+        serverStatus ? this.succesCallBack() : this.errorCallBack(message);
+        return serverStatus;
 
     }
 
