@@ -7,7 +7,7 @@ export type ErrorCallBack = (error: string) => void;
 export class CheckAndLog {
 
     constructor(
-        private readonly logDataSource: LogDataSource,
+        private readonly logDataSource: LogDataSource[],
         private readonly succescallback: SuccesCallBack,
         private readonly errorcallback: ErrorCallBack,
     ) { }
@@ -38,7 +38,7 @@ export class CheckAndLog {
             message,
         })
 
-        await this.logDataSource.saveLog(log);
+        this.logDataSource.forEach(async logdatasource => await logdatasource.saveLog(log));
         ok ? this.succescallback() : this.errorcallback(message);
         return ok;
 
