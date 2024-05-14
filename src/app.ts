@@ -1,6 +1,8 @@
 import { ENVS } from "./config/envs";
 import { MongoDatabase } from "./infraestructure/databases/mongo/init";
+import { FileSystemDataSource } from "./infraestructure/datasources/filesystemDataSource";
 import { MongoDataSource } from "./infraestructure/datasources/mongoDataSource";
+import { PostgreDataSource } from "./infraestructure/datasources/postgresDataSource";
 import { NOCServer } from "./presentation/server";
 import { CheckAndLog } from "./use-cases/check/check-and-log";
 
@@ -12,9 +14,15 @@ async function main() {
 
     await MongoDatabase.connect(ENVS.MONGO_URL);
     const mongods = new MongoDataSource();
+    const filesystemds = new FileSystemDataSource();
+    const postgreds = new PostgreDataSource();
 
     const logger = new CheckAndLog(
-        mongods,
+        [
+            filesystemds,
+            mongods,
+            postgreds
+        ],
         () => console.log('Connection is working'),
         (error) => console.log('Connection is NOT working'),
     );
