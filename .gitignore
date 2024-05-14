@@ -3,3 +3,4 @@
 /.env
 /mongo
 /logs
+/postgres
