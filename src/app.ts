@@ -1,8 +1,6 @@
 import { ENVS } from "./config/envs";
 import { MongoDatabase } from "./infraestructure/databases/mongo/init";
-import { FileSystemDataSource } from "./infraestructure/datasources/filesystemDataSource";
-import { MongoDataSource } from "./infraestructure/datasources/mongoDataSource";
-import { PostgreDataSource } from "./infraestructure/datasources/postgresDataSource";
+import { FileSystemDataSource, MongoDataSource, PostgreDataSource } from "./infraestructure/datasources";
 import { NOCServer } from "./presentation/server";
 import { CheckAndLog } from "./use-cases/check/check-and-log";
 
