@@ -28,18 +28,28 @@ export class LogEntity {
         this.createdAt = createdAt;
     }
 
+    private static checkProperties = (message:string,level:LogEntityLevel,origin:string) => {
+
+        if (!message)throw new Error('message property is missing');
+        if (!level) throw new Error('level property is missing');
+        if (!origin) throw new Error('origin property is missing');
+        // createdAt has a default value in LogEntity constructor
+    }
+
     static fromJson(jsonString: string): LogEntity {
 
         if (!jsonString)
             jsonString = '{}';
 
-        const { message, level, origin, createdAt } = JSON.parse(jsonString);
+        const { message, level, origin, createdAt} = JSON.parse(jsonString);
+
+        this.checkProperties(message, level, origin);
 
         const log = new LogEntity({
             message,
             level,
             origin,
-            createdAt,
+            createdAt: new Date(createdAt)
         })
 
         return log;
@@ -49,16 +59,7 @@ export class LogEntity {
 
         const { message, level, origin, createdAt } = object;
 
-        if (!message)
-            throw new Error('message property is missing');
-
-        if (!level)
-            throw new Error('level property is missing');
-
-        if (!origin)
-            throw new Error('origin property is missing');
-
-        // createdAt has a default value in LogEntity constructor
+        this.checkProperties(message,level,origin);       
 
         const log = new LogEntity({
             message,
