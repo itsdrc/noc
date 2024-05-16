@@ -1,4 +1,4 @@
-import mongoose, { Mongoose, mongo } from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 import { MongoDatabase } from '../../../../src/infraestructure/databases/mongo/init';
 
 describe('MongoDataBase',()=>{
