@@ -15,7 +15,7 @@ export class FileSystemDataSource implements LogDataSource {
         this.mediumLogsPath = `${this.logPath}/medium.log`;
         this.highLogsPath = `${this.logPath}/high.log`;
         this.createFolder();
-    } 
+    }
 
     private createFolder() {
 
@@ -36,8 +36,10 @@ export class FileSystemDataSource implements LogDataSource {
     async saveLog(log: LogEntity): Promise<void> {
 
         const logAsJson = `${JSON.stringify(log)}\n`;
-        fs.appendFileSync(this.allLogsPath, logAsJson);
+
         switch (log.level) {
+            case LogEntityLevel.low: fs.appendFileSync(this.allLogsPath, logAsJson);
+                break;
             case LogEntityLevel.medium: fs.appendFileSync(this.mediumLogsPath, logAsJson);
                 break;
             case LogEntityLevel.high: fs.appendFileSync(this.highLogsPath, logAsJson);
