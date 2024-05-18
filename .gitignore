@@ -5,3 +5,5 @@
 /logs
 /postgres
 /coverage
+/mongo-test
+/postgres-test

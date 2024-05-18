@@ -3,7 +3,7 @@
  * https://jestjs.io/docs/configuration
  */
 
-import type {Config} from 'jest';
+import type { Config } from 'jest';
 
 const config: Config = {
 
@@ -199,6 +199,12 @@ const config: Config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
+  "watchPathIgnorePatterns": [
+    '<rootDir>/mongo-test/',
+    '<rootDir>/mongo/',
+    '<rootDir>/postgres-test/',
+    '<rootDir>/postgres',
+  ]
 };
 
 export default config;
