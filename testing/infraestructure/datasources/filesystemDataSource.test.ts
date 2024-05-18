@@ -4,13 +4,15 @@ import fs, { MakeDirectoryOptions, Mode, PathLike } from 'fs';
 
 describe('FileSystemDataSource', () => {
 
+    const logsFolderForTesting = 'logs-test';
+
     const mkDirSyncMock = jest.spyOn(fs, 'mkdirSync')
         .mockImplementation(
             (path: PathLike,
                 options?: | Mode | MakeDirectoryOptions | null | undefined) => undefined
         );
 
-    const fsDataSource = new FileSystemDataSource();
+    const fsDataSource = new FileSystemDataSource(logsFolderForTesting);
 
     const fsAppendMock = jest.spyOn(fs, 'appendFileSync')
         .mockImplementation(() => { });
@@ -38,7 +40,7 @@ describe('FileSystemDataSource', () => {
     });
 
     const rmLogsFolder = () => {
-        fs.rmSync('logs', { recursive: true });
+        fs.rmSync(logsFolderForTesting, { recursive: true });
     }
 
     test('should create the folder if does not exists', async () => {
@@ -63,31 +65,31 @@ describe('FileSystemDataSource', () => {
         expect(mkDirSyncMock).not.toHaveBeenCalledTimes(1);
     });
 
-    test('saveLog - should write low-log only on logs/low.log', async () => {
+    test(`saveLog - should write low-log only on ${logsFolderForTesting}/low.log`, async () => {
 
         await fsDataSource.saveLog(lowLog);
         expect(fsAppendMock).toHaveBeenCalledWith(
-            'logs/low.log'
+            `${logsFolderForTesting}/low.log`
             , `${JSON.stringify(lowLog)}\n`
         );
         expect(fsAppendMock).toHaveBeenCalledTimes(1);
     });
 
-    test('saveLog - should write medium-log only on logs/medium.log', async () => {
+    test(`saveLog - should write medium-log only on ${logsFolderForTesting}/medium.log`, async () => {
 
         await fsDataSource.saveLog(mediumLog);
         expect(fsAppendMock).toHaveBeenCalledWith(
-            'logs/medium.log'
+            `${logsFolderForTesting}/medium.log`
             , `${JSON.stringify(mediumLog)}\n`
         );
         expect(fsAppendMock).toHaveBeenCalledTimes(1);
     });
 
-    test('saveLog - should write high-log only on logs/high.log', async () => {
+    test(`saveLog - should write high-log only on ${logsFolderForTesting}/high.log`, async () => {
 
         await fsDataSource.saveLog(highLog);
         expect(fsAppendMock).toHaveBeenCalledWith(
-            'logs/high.log'
+            `${logsFolderForTesting}/high.log`
             , `${JSON.stringify(highLog)}\n`
         );
         expect(fsAppendMock).toHaveBeenCalledTimes(1);
@@ -98,7 +100,7 @@ describe('FileSystemDataSource', () => {
         jest.restoreAllMocks();
 
         // We need to create the logs folder first
-        const datasource = new FileSystemDataSource();
+        const datasource = new FileSystemDataSource(logsFolderForTesting);
         await datasource.saveLog(lowLog);
         await datasource.saveLog(lowLog);
         await datasource.saveLog(mediumLog);
@@ -114,7 +116,7 @@ describe('FileSystemDataSource', () => {
         jest.restoreAllMocks();
 
         // We need to create the logs folder first
-        const datasource = new FileSystemDataSource();
+        const datasource = new FileSystemDataSource(logsFolderForTesting);
         await datasource.saveLog(lowLog);
         await datasource.saveLog(mediumLog);
         await datasource.saveLog(mediumLog);
@@ -130,7 +132,7 @@ describe('FileSystemDataSource', () => {
         jest.restoreAllMocks();
 
         // We need to create the logs folder first
-        const datasource = new FileSystemDataSource();
+        const datasource = new FileSystemDataSource(logsFolderForTesting);
         await datasource.saveLog(lowLog);        
         await datasource.saveLog(mediumLog);
         await datasource.saveLog(highLog);
