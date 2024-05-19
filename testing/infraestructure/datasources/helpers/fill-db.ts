@@ -1,4 +1,6 @@
 import { LogEntity, LogEntityLevel } from '../../../../src/domain/entities/log.entity';
+import { logModel } from '../../../../src/infraestructure/databases/mongo/models/log.model';
+import { prisma } from '../../../../src/infraestructure/databases/postgres/init';
 
 export const testLogs: Readonly<{
     [key: string]: Readonly<LogEntity>;
@@ -59,3 +61,46 @@ export const testLogs: Readonly<{
     }),
 };
 
+export const fillMongoDB = async () => {
+
+    await logModel.create(testLogs.lowLog1);
+    await logModel.create(testLogs.lowLog2);
+    await logModel.create(testLogs.lowLog3);
+    await logModel.create(testLogs.mediumLog1);
+    await logModel.create(testLogs.mediumLog2);
+    await logModel.create(testLogs.mediumLog3);
+    await logModel.create(testLogs.highLog1);
+    await logModel.create(testLogs.highLog2);
+    await logModel.create(testLogs.highLog3);
+}
+
+export const fillPostgresDB = async ()=> {
+
+    await prisma.prismaLogModel.create({
+        data: testLogs.lowLog1
+    });
+    await prisma.prismaLogModel.create({
+        data: testLogs.lowLog2
+    });
+    await prisma.prismaLogModel.create({
+        data: testLogs.lowLog3
+    });
+    await prisma.prismaLogModel.create({
+        data: testLogs.mediumLog1
+    });
+    await prisma.prismaLogModel.create({
+        data: testLogs.mediumLog2
+    });
+    await prisma.prismaLogModel.create({
+        data: testLogs.mediumLog3
+    });
+    await prisma.prismaLogModel.create({
+        data: testLogs.highLog1
+    });
+    await prisma.prismaLogModel.create({
+        data: testLogs.highLog2
+    });
+    await prisma.prismaLogModel.create({
+        data: testLogs.highLog3
+    });    
+}

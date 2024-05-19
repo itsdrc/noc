@@ -3,8 +3,7 @@ import { ENVS } from '../../../src/config/envs';
 import { LogEntity, LogEntityLevel } from '../../../src/domain/entities/log.entity';
 import { MongoDataSource } from '../../../src/infraestructure/datasources/mongoDataSource';
 import { logModel } from '../../../src/infraestructure/databases/mongo/models/log.model';
-import { testLogs } from './helpers/test-logs';
-
+import { fillMongoDB, testLogs } from './helpers/fill-db';
 
 describe('MongoDataSource', () => {
 
@@ -28,19 +27,6 @@ describe('MongoDataSource', () => {
         origin: 'testfile',
     });
 
-    const seedDB = async () => {
-
-        await logModel.create(testLogs.lowLog1);
-        await logModel.create(testLogs.lowLog2);
-        await logModel.create(testLogs.lowLog3);
-        await logModel.create(testLogs.mediumLog1);
-        await logModel.create(testLogs.mediumLog2);
-        await logModel.create(testLogs.mediumLog3);
-        await logModel.create(testLogs.highLog1);
-        await logModel.create(testLogs.highLog2);
-        await logModel.create(testLogs.highLog3);
-    };
-
     test('saveLog - should create the log succefully', async () => {
 
         await mongoDataSource.saveLog(testLog);
@@ -52,7 +38,7 @@ describe('MongoDataSource', () => {
 
     test('getLogs - should get the logs sucefully', async () => {
 
-        await seedDB();
+        await fillMongoDB();
 
         const lowLogs = await mongoDataSource.getLogs(LogEntityLevel.low);
 
