@@ -14,9 +14,9 @@ datasource db {
 }
 
 enum SeverityLevel {
-  LOW
-  MEDIUM
-  HIGH
+  low
+  medium
+  high
 }
 
 model prismaLogModel {
