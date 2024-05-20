@@ -1,3 +1,4 @@
+import { ENVS } from "../../config/envs";
 import { DiscordService } from "../../infraestructure/services/discord-service";
 import { CheckServerStatus } from "../server/checkstatus";
 
@@ -14,7 +15,7 @@ export class DiscordNotificationController {
        const statusOk = await this.checkServer.checkStatus();
 
         if(!statusOk)
-            this.discordService.notify(`The url ${this.discordService.discordWebHookUrl} is not working`);
+            this.discordService.notify(`The url ${ENVS.URL} is not working`);
     }
 
 }
