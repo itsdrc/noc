@@ -19,7 +19,10 @@ async function main() {
     const postgreds = new PostgreDataSource();
     const checkServer = new CheckServerStatus(ENVS.URL);
     const discordController = new DiscordNotificationController(
-        checkServer, new DiscordService(ENVS.DISCORD_WEBHOOK_URL)
+        checkServer, new DiscordService(
+            ENVS.DISCORD_WEBHOOK_URL,
+            'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaDl3ajA0cjd4YWtkaHQybXQ1MjhhcGkzeDdwYnVjZHhnajJ5Z3hiYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7WTDH9gYo71TurPq/giphy.gif'
+        )
     );
 
     const logger = new CheckAndLog({

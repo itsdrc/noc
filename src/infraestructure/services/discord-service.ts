@@ -3,16 +3,15 @@ export class DiscordService {
 
     constructor(
         public readonly discordWebHookUrl: string,
+        public readonly image:string,        
     ){}
 
     async notify(message: string): Promise<boolean> {
 
-        const gifUrl = 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaDl3ajA0cjd4YWtkaHQybXQ1MjhhcGkzeDdwYnVjZHhnajJ5Z3hiYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7WTDH9gYo71TurPq/giphy.gif';
-
         const body = {
             content: message,
             embeds: [{
-                image: { url: gifUrl }
+                image: { url: this.image }
             }]
         };
 
@@ -22,7 +21,7 @@ export class DiscordService {
             body: JSON.stringify(body),
         });
 
-        if(!response){
+        if(!response.ok){
             console.error('Error notifyng discord');
             return false;
         }

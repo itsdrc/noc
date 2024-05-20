@@ -6,7 +6,7 @@ import { CheckServerStatus } from '../../../src/use-cases/server/checkstatus';
 
 describe('DiscordNotificationController', () => {
 
-    const discordService = new DiscordService(ENVS.DISCORD_WEBHOOK_URL);
+    const discordService = new DiscordService(ENVS.DISCORD_WEBHOOK_URL,'randomUrl');
     const checkService = new CheckServerStatus('MyUrl/test');
     const controller = new DiscordNotificationController(checkService, discordService);
     const spyOnNotify = jest.spyOn(discordService, 'notify')
