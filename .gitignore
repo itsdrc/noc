@@ -7,3 +7,4 @@
 /coverage
 /mongo-test
 /postgres-test
+/dist
